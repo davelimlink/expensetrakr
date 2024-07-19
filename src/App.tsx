@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import ExpenseList from "./components/expense-tracker/ExpenseList";
-
+import ExpenseList from "./components/ExpenseList";
 const App = () => {
   const [expenses, setExpenses] = useState([
     { id: 1, description: "aaa", amount: 10, category: "Utilities" },
