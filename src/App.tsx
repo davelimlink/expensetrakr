@@ -10,7 +10,10 @@ const App = () => {
 
   return (
     <div>
-      <ExpenseList expense={expenses} onDelete={(id) => console.log(id)} />
+      <ExpenseList
+        expense={expenses}
+        onDelete={(id) => setExpenses(expenses.filter((e) => e.id !== id))}
+      />
     </div>
   );
 };
