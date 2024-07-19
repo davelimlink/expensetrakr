@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ExpenseList from "./components/ExpenseList";
+import ExpenseFilter from "./components/ExpenseFilter";
 const App = () => {
   const [expenses, setExpenses] = useState([
     { id: 1, description: "aaa", amount: 10, category: "Utilities" },
@@ -10,10 +11,15 @@ const App = () => {
 
   return (
     <div>
-      <ExpenseList
-        expense={expenses}
-        onDelete={(id) => setExpenses(expenses.filter((e) => e.id !== id))}
-      />
+      <div className="mb-3">
+        <ExpenseFilter onSelectCategory={(category) => console.log(category)} />
+      </div>
+      <div>
+        <ExpenseList
+          expense={expenses}
+          onDelete={(id) => setExpenses(expenses.filter((e) => e.id !== id))}
+        />
+      </div>
     </div>
   );
 };
