@@ -17,17 +17,27 @@ const schema = z.object({
   }),
 });
 
+interface Props {
+  onSubmit: (data: ExpenseFromData) => void;
+}
+
 type ExpenseFromData = z.infer<typeof schema>;
 
-const ExpenseForm = () => {
+const ExpenseForm = ({ onSubmit }: Props) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ExpenseFromData>({ resolver: zodResolver(schema) });
 
   return (
-    <form onSubmit={handleSubmit((data) => console.log(data))}>
+    <form
+      onSubmit={handleSubmit((data) => {
+        onSubmit(data);
+        reset();
+      })}
+    >
       <div className="md-3">
         <label htmlFor="description" className="form-label">
           Description
@@ -60,12 +70,7 @@ const ExpenseForm = () => {
         <label htmlFor="category" className="form-label">
           Category
         </label>
-        <select
-          {...register("category")}
-          name=""
-          id="category"
-          className="form-select"
-        >
+        <select {...register("category")} id="category" className="form-select">
           <option value=""></option>
           {categories.map((category) => (
             <option key={category} value={category}>
@@ -77,7 +82,7 @@ const ExpenseForm = () => {
           <p className="text-danger">{errors.category.message}</p>
         )}
       </div>
-      <button className="btn btn-primary">Submit</button>
+      <button className="btn btn-primary mt-4">Submit</button>
     </form>
   );
 };
