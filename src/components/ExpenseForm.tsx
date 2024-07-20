@@ -2,6 +2,8 @@ import categories from "./categories";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useLocalStorage } from "./useLocalStorage";
+import { useState } from "react";
 
 const schema = z.object({
   description: z
@@ -31,6 +33,10 @@ const ExpenseForm = ({ onSubmit }: Props) => {
     formState: { errors },
   } = useForm<ExpenseFromData>({ resolver: zodResolver(schema) });
 
+  const [value, setValue] = useState("");
+
+  const { setItem } = useLocalStorage("value");
+
   return (
     <form
       onSubmit={handleSubmit((data) => {
@@ -47,6 +53,7 @@ const ExpenseForm = ({ onSubmit }: Props) => {
           id="description"
           type="text"
           className="form-control"
+          onChange={(e) => setValue(e.target.value)}
         />
         {errors.description && (
           <p className="text-danger">{errors.description.message}</p>
@@ -61,6 +68,7 @@ const ExpenseForm = ({ onSubmit }: Props) => {
           id="amount"
           type="number"
           className="form-control"
+          onChange={(e) => setValue(e.target.value)}
         />
         {errors.amount && (
           <p className="text-danger">{errors.amount.message}</p>
@@ -70,8 +78,13 @@ const ExpenseForm = ({ onSubmit }: Props) => {
         <label htmlFor="category" className="form-label">
           Category
         </label>
-        <select {...register("category")} id="category" className="form-select">
-          <option value=""></option>
+        <select
+          {...register("category")}
+          id="category"
+          className="form-select"
+          onChange={(e) => setValue(e.target.value)}
+        >
+          <option></option>
           {categories.map((category) => (
             <option key={category} value={category}>
               {category}
@@ -82,7 +95,13 @@ const ExpenseForm = ({ onSubmit }: Props) => {
           <p className="text-danger">{errors.category.message}</p>
         )}
       </div>
-      <button className="btn btn-primary mt-4">Submit</button>
+      <button
+        className="btn btn-primary mt-4"
+        value={value}
+        onClick={() => setItem(value)}
+      >
+        Submit
+      </button>
     </form>
   );
 };
